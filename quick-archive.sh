@@ -25,7 +25,7 @@ quick_archive () {
     readonly local TODAY=`date +%m-%d-%y-%H-%M`
     tar -cf temp.tar ${ARGS[0]}
     # This is has portable issue, via Maximus authentication is handled by PAM
-    mysqldump -u $MYSQL_USER ${ARGS[2]} -pdev > ${ARGS[2]}_$TODAY.sql
+    mysqldump -u $MYSQL_USER ${ARGS[2]} -p > ${ARGS[2]}_$TODAY.sql
     tar -uf temp.tar ${ARGS[2]}_$TODAY.sql
     gzip temp.tar
     mv temp.tar.gz ${ARGS[1]}_$TODAY.tar.gz
@@ -53,6 +53,4 @@ main () {
     rm ${ARGS[2]}_$TODAY.sql;
 }
 main "$@"
-
-
 
