@@ -1,9 +1,9 @@
 #!/bin/bash
-:'
+: '
     Author: Max Resnick
     Usage: Used to copy code from one directory to another, and test permissions.
 
-    '
+   '
 usage () {
     printf "
     Wrapper for RSYNC and Find Permissions Errors.
@@ -36,14 +36,14 @@ live_copy () {
 
 permissions_test () {
     # Hack -- are we on a RPM or DEB system?
-    groups apache
+    groups apache > /dev/null 2>&1 
     local webgrouptest=$?
     if [[ $webgrouptest -ne 0 ]]; then
          local webgrouptest=www-data
     elif [[ $webgrouptest  -eq 0 ]]; then
         local webgroup=apache
     fi
-    find $DOPT \! -group  $WEBGROUP -ls
+    find $DOPT \! -group  $webgroup -ls
     find $DOPT -type d \! -perm /g+r -ls
     printf "
     ###########################################
