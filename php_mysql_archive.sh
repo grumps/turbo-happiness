@@ -55,6 +55,3 @@ main () {
     rm ${ARGS[2]}_$TODAY.sql;
 }
 main "$@"
-
-
-
