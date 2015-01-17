@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 :'
     Author: Max Resnick
     Usage: Used in the case of Drush not available.
