@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# source in .bashrc
 create_mysql_db () {
     while getopts ":d:m:u:" settings;
     do
