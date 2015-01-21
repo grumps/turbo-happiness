@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+USER=$(whoami)
+RSYNC=$(which rsync)
+LOGGER=$(which logger)
+
+$LOGGER "Starting rsync backup."
+if [ -f /home/$USER/.env_vars ]; then
+	source /home/$USER/.env_vars
+else
+	$LOGGER "rsync wrapper env_vars not found"
+	exit 1
+fi
+
+if [ -f /home/$USER/.ssh/config ]; then
+    $RSYNC -rl --exclude-from=/etc/backups/rsync_exclude.conf $HOME -e ssh $USER.$BACKUP_SERVER:$BACKUP_PATH/$USER/rsync
+    rsync_status="$?"
+    if [ "$rsync_status" = "0" ]; then
+        $LOGGER "Finished rsync backup."
+        exit $rsync_status
+    else
+        $LOGGER "ERROR: rsync wrapper exits with status $rsync_status"
+        exit $rsync_status
+    fi
+
+fi
+$LOGGER "CONFIG: rsync wrapper fails config test."
