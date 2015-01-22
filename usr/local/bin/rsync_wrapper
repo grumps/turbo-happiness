@@ -21,6 +21,5 @@ if [ -f /home/$USER/.ssh/config ]; then
         $LOGGER "ERROR: rsync wrapper exits with status $rsync_status"
         exit $rsync_status
     fi
-
 fi
 $LOGGER "CONFIG: rsync wrapper fails config test."

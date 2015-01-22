@@ -2,10 +2,11 @@
 USER=$(whoami)
 OBNAM=$(which obnam)
 LOGGER=$(which logger)
-echo "starting"
+
+$LOGGER "starting"
 if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
     $OBNAM backup $HOME --config=/home/$USER/$USER.home.obnam.conf
 else
-     logger CONFIG: obnam wrapper for $USER failed
+     $LOGGER CONFIG: obnam wrapper for $USER failed
 fi
 exit $?;
