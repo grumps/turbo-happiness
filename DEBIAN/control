@@ -1,7 +1,9 @@
 Package: turbo-happiness
 Architecture: all
 Maintainer: grumps
-Depends: debconf (>= 0.5.00), rsync, obnam, tar,
+Depends: rsync (>= 3.1.1), obnam (>= 1.7), tar (>= 1.27.1)
 Priority: optional
-Version: 0.1
-Description: My turbo happiness scripts.
+Version: 0.1.1
+Description: My turbo happiness scripts
+ This contains some common package needs.
+ 

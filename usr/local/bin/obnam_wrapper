@@ -1,12 +1,23 @@
 #!/usr/bin/env sh
 USER=$(whoami)
 OBNAM=$(which obnam)
-LOGGER=$(which logger)
+LOGGER_TAG="Obnam Wrapper"
+LOGGER="$(which logger) -t $LOGGER_TAG"
 
-$LOGGER "starting"
+$LOGGER "starting for $USER failed."
 if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
     $OBNAM backup $HOME --config=/home/$USER/$USER.home.obnam.conf
+    readonly backup_status="$?"
 else
-     $LOGGER CONFIG: obnam wrapper for $USER failed
+    $LOGGER "config test failed for $USER."
+    exit 1;
+fi
+
+if [ "$backup_status" = "0" ]; then
+	$LOGGER "finished for $USER."
+	exit $backup_status;
+else
+	$LOGGER "failed for $USER with exit status."
+	exit $backup_status;
 fi
 exit $?;
