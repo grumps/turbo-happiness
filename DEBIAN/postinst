@@ -1,0 +1,9 @@
+#!/bin/sh -e
+echo -n "Do you like debian? [yn] "
+read like
+case "$like" in
+n*|N*)
+    echo "Poor misguided one. Why are you installing this package, then?"
+    /etc/init.d/subliminal_messages start "I like debian."
+;;
+esac
