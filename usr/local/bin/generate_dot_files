@@ -1,39 +1,32 @@
-#!/bin/bash -e
+#!/bin/bash -vx
 
 install_dot () {
-    echo -n "Who would you like to install dotfiles for?"
-    read user
+    readonly local user="$(who am i | awk '{print $1}')"
     
-    getint passwd $user
-    local status=$?
-
-    if [[ $status -ne 0 ]]
-        then
-            echo "User not found..."
-            exit;
-        done
-    fi
-
-    echo "Only current package configs are used, so you must accept overiding current configs."
+    case "$user" in
+        root) prefix="";;
+        *) prefix="/home";;
+    esac
     
-    configs=(/etc/turbo_happiness/*)
+    local configs=(/etc/turbo_happiness/*)
     for config in "${configs[@]}"
     do
-        # check for previous configs.
+        # check && remove previous existing config.
         if [[ $config == *".dpkg-dist"* ]];
             then
                 configs=(${configs[@]/$config})
-            done
+                done;
         fi        
         
         # make backup of existing config
-        if [[ -e /home/$user/$config ]];
+        if [[ -e $prefix/$user/.$config ]];
             then
-                mv /home/$user/$config /home/$user/$config.bk
-            done
+                cp $prefix/$user/.$config $prefix/$user/$config.bk
+                rm $prefix/$user/.$config;
         fi
-        cp /etc/turbo_happiness/$config /home/$user/.$config
+        cp /etc/turbo_happiness/$config $prefix/$user/.$config;
     done
+    exit 0
 }
 
 echo -n "Would you like to install dotfiles? [yn] "
