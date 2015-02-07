@@ -1,30 +1,36 @@
 #!/bin/bash -vx
 
 install_dot () {
-    readonly local user="$(who am i | awk '{print $1}')"
+    local user="$(who am i | awk '{print $1}')"
     
     case "$user" in
         root) prefix="";;
+    "") user=root && prefix="";; # we are in chroot?
         *) prefix="/home";;
     esac
     
-    local configs=(/etc/turbo_happiness/*)
-    for config in "${configs[@]}"
+    local configs_full_path=(/etc/turbo_happiness/*)
+
+    for config_path in "${configs_full_path[@]}"
     do
-        # check && remove previous existing config.
-        if [[ $config == *".dpkg-dist"* ]];
+       # check && remove previous existing config.
+        if [[ $config_path == *".dpkg-dist"* ]];
             then
-                configs=(${configs[@]/$config})
-                done;
+                configs_full_path=(${configs_full_path[@]/$config})
+            continue;
         fi        
-        
+        config_file=$(basename $config_path)
         # make backup of existing config
-        if [[ -e $prefix/$user/.$config ]];
+        if [[ -e $prefix/$user/.$config_file ]];
             then
-                cp $prefix/$user/.$config $prefix/$user/$config.bk
-                rm $prefix/$user/.$config;
+                echo "cp $prefix/$user/.$config_file $prefix/$user/$config_file.bk"
+                cp $prefix/$user/.$config_file $prefix/$user/$config_file.bk
+                echo "rm $prefix/$user/.$config_file"
+                rm $prefix/$user/.$config_file;
         fi
-        cp /etc/turbo_happiness/$config $prefix/$user/.$config;
+
+    echo "wtf"
+        cp /etc/turbo_happiness/$config_file $prefix/$user/.$config_file;
     done
     exit 0
 }
