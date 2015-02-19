@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 USER=$(whoami)
 RSYNC=$(which rsync)
-LOGGER_TAG="Rsync Wrapper"
-LOGGER="$(which logger) -t $LOGGER_TAG"
+LOGGER_TAG="'Rsync Wrapper'"
+LOGGER="$(which logger) -t $LOGGER_TAG -f /var/log/turbo_happiness"
 
 $LOGGER "Starting rsync backup."
 if [ -f /home/$USER/.env_vars ]; then
