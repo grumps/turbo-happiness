@@ -5,7 +5,7 @@ install_dot () {
     
     case "$user" in
         root) prefix="";;
-    "") user=root && prefix="";; # we are in chroot?
+        "") user=root && prefix="";; # we are in chroot?
         *) prefix="/home";;
     esac
     
@@ -28,8 +28,6 @@ install_dot () {
                 echo "rm $prefix/$user/.$config_file"
                 rm $prefix/$user/.$config_file;
         fi
-
-    echo "wtf"
         cp /etc/turbo_happiness/$config_file $prefix/$user/.$config_file;
     done
     exit 0
