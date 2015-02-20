@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 USER=$(whoami)
 OBNAM=$(which obnam)
-LOGGER_TAG="Obnam Wrapper"
-LOGGER="$(which logger) -t $LOGGER_TAG"
+LOGGER_TAG="'Obnam Wrapper'"
+LOGGER="$(which logger) -t $LOGGER_TAG -f /var/log/turbo_happiness"
 
 $LOGGER "starting for $USER failed."
 if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
