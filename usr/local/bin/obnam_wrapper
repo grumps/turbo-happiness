@@ -1,23 +1,30 @@
-#!/usr/bin/env sh
+#!/bin/bash -vx
 USER=$(whoami)
 OBNAM=$(which obnam)
-LOGGER_TAG="'Obnam Wrapper'"
-LOGGER="$(which logger) -t $LOGGER_TAG -f /var/log/turbo_happiness"
+LOGGER_TAG="obnam_wrapper"
+LOGGER="$(which logger) -t $LOGGER_TAG -i"
 
-$LOGGER "starting for $USER failed."
+$LOGGER "starting for $USER"
 if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
     $OBNAM backup $HOME --config=/home/$USER/$USER.home.obnam.conf
     readonly backup_status="$?"
 else
-    $LOGGER "config test failed for $USER."
+    echo "config test failed for $USER." | $LOGGER -p user.crit
     exit 1;
 fi
 
 if [ "$backup_status" = "0" ]; then
-	$LOGGER "finished for $USER."
+	echo "finished for $USER." | $LOGGER -p user.info
 	exit $backup_status;
 else
-	$LOGGER "failed for $USER with exit status."
-	exit $backup_status;
+	logfile=$(awk -F "=" '/log/ {print $2; exit;}' /home/$USER/$USER.home.obnam.conf)
+    error_date=$(awk -F " " '/R681AEX/ {edate=$1}END{print edate}' $logfile)
+    todayd=$(date +"%Y-%m-%d")
+    hostz=$(hostname)
+    if [ "$error_date" == "$todayd" ]; then
+        echo "Obnam lock couldn't be set on $hostz" | mail -s "$todayd obnam error" "max_resnick@fastmail.fm"
+
+    echo "failed for $USER with exit status $backup_status" | $LOGGER -p user.err
+    exit $backup_status;
 fi
 exit $?;
