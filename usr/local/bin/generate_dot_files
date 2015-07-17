@@ -1,4 +1,4 @@
-#!/bin/bash -vx
+#!/usr/bin/env bash
 
 install_dot () {
     local user="$(who am i | awk '{print $1}')"

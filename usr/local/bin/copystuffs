@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 : '
     Author: Max Resnick
     Usage: Used to copy code from one directory to another, and test permissions.
@@ -75,7 +75,7 @@ main () {
         printf "$live_run%s\n"
         local permissions=$(permissions_test);
         printf "$permissions%s\n";
-    # I wanna delete code method.
+    # TODO I wanna delete code method.
     else
         echo "Source and/or Destination Arguments Missing";
         exit 1;
