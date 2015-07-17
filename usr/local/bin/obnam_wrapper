@@ -4,7 +4,7 @@ OBNAM=$(which obnam)
 LOGGER_TAG="obnam_wrapper"
 LOGGER="$(which logger) -t $LOGGER_TAG -i"
 
-$LOGGER "starting for $USER"
+echo "starting for $USER" | $LOGGER -p user.info
 if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
     $OBNAM backup $HOME --config=/home/$USER/$USER.home.obnam.conf
     readonly backup_status="$?"
