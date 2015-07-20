@@ -1,0 +1,17 @@
+Source: turbo-happiness
+Section: unknown
+Priority: optional
+Maintainer: Max Resnick <max@ofmax.li>
+Version: 1.4``
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://anonscm.debian.org/collab-maint/turbo-happiness.git
+#Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/turbo-happiness.git;a=summary
+
+Package: turbo-happiness
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, rsync (>= 3.0), obnam (>= 1.5), tar (>= 1.15)
+Description: Turbo Happiness Scripts
+ This contains some common package needs,
+ obnam wrapper, rsync wrapper, and dotfiles.
