@@ -9,7 +9,7 @@ install_dot () {
         *) prefix="/home";;
     esac
     
-    local configs_full_path=(/etc/turbo_happiness/*)
+    local configs_full_path=(/etc/turbo-happiness/*)
 
     for config_path in "${configs_full_path[@]}"
     do
