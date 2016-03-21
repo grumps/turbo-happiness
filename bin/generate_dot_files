@@ -28,7 +28,7 @@ install_dot () {
                 echo "rm $prefix/$user/.$config_file"
                 rm $prefix/$user/.$config_file;
         fi
-        cp /etc/turbo_happiness/$config_file $prefix/$user/.$config_file;
+        cp /etc/turbo-happiness/$config_file $prefix/$user/.$config_file;
     done
     exit 0  
 }
