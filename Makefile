@@ -2,19 +2,20 @@
 VERSION=v${version}
 
 v%:
-	git tag -a $@ -m "Release $@"
+	-git tag -a $@ -m "Release $@"
 	git push origin $@
 
-turbo-happiness-%: $(VERSION)
-	mkdir -p $@
+pkgdir: $(VERSION)
+	mkdir -p turbo-happiness-${version}
 
-tarball: turbo-happiness-${version}
+tarball: pkgdir
 	wget -O- https://www.github.com/grumps/turbo-happiness/tarball/$(VERSION) \
 			 > turbo-happiness-${version}/turbo-happiness_${version}.orig.tar.gz	
 	tar -C turbo-happiness-${version} -xf turbo-happiness-${version}/turbo-happiness_${version}.orig.tar.gz --strip-components=1
 	cd turbo-happiness-${version} && dch --newversion ${version} "Release ${version}"
 
 builddeb: tarball
+	rm turbo-happiness-${version}/Makefile
 	cd turbo-happiness-${version} && debuild -us -uc -b
 
 addtorepo: builddeb
