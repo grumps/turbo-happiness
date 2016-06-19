@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+gtag() {
+    tag_message="$1"
+    curr_date=$(date +%Y-%m-%d)
+    curr_time=$(date +%Hh%Mmm)
+    new_tag="release_$curr_date-$curr_time"
+    git tag -a $new_tag -m $tag_message
+}
