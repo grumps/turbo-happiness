@@ -2,7 +2,7 @@
 VERSION=v${version}
 
 v%:
-	-git tag -a $@ -m "Release $@"
+	git tag -s $@ -m "Release $@"
 	git push origin $@
 
 pkgdir: $(VERSION)
