@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+usage() {
+    printf "
+    -t file type
+    -w working directory
+    -s starting name
+    -f finishing name
+    -h print this message
+    "
+}
+
+clean() {
+    find $REFACTOR_PATH -name *.$FTYPE. $FTYPE -print0 | xargs -0 rm
+}
+
+activate() {
+    FILES=$(find $REFACTOR_PATH -type f -name "*.$FTYPE") 
+    for file in $FILES;
+    do
+        sed -i.$FTYPE "s@$FROM@$TO@g" $file
+    done
+}
+
+main() {                                                          
+    while getopts t:w:s:fh name                          
+    do                                                            
+        case $name in
+            t)readonly FTYPE=$OPTARG;;
+            w)readonly REFACTOR_PATH=$OPTARG;;
+            s)readonly FROM=$OPTARG;; 
+            t)readonly TO=$OPTARG;;
+            h)usage && kill -INT $$;;
+            *)echo "Invalid argument" && usage && kill -INT $$;; 
+        esac                                                      
+    done
+    if [ ! -z $FTYPE ] && [ ! -z $REFACTOR_PATH ] && [ ! -z $FROM ] && [ ! -z $TO ] 
+    then
+        activate
+    else
+        echo "Required Opts not set."
+    fi
+}                                                                 
+main "$@";                                                        
