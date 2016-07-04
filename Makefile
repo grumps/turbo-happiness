@@ -26,5 +26,12 @@ publish: addtorepo
 	# add aws creds to env and publish
 	. /home/$(USER)/.aws.sh && aptly --config=/home/$(USER)/.aptly.conf publish --gpg-key="97D14D14" switch squeeze s3:repo.resnick.li: mjr-${version}
 
+
+fpm: $(VERSION)
+	fpm -s dir -t osxpkg --osxpkg-identifier-prefix li.ofmax --name turbo-happiness  --version $(VERSION) ./bin=/usr/local
+	
+build-osx: 
+
+
 release: publish
 	@echo "package pushed."
