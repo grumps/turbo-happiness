@@ -23,18 +23,19 @@ activate() {
 }
 
 main() {                                                          
-    while getopts t:w:s:fh name                          
+    while getopts t:w:s:f:h name                          
     do                                                            
         case $name in
             t)readonly FTYPE=$OPTARG;;
             w)readonly REFACTOR_PATH=$OPTARG;;
             s)readonly FROM=$OPTARG;; 
-            t)readonly TO=$OPTARG;;
+            f)readonly TO=$OPTARG;;
             h)usage && kill -INT $$;;
             *)echo "Invalid argument" && usage && kill -INT $$;; 
         esac                                                      
     done
-    if [ ! -z $FTYPE ] && [ ! -z $REFACTOR_PATH ] && [ ! -z $FROM ] && [ ! -z $TO ] 
+    
+    if [ ! -z "$FTYPE" ] && [ ! -z "$REFACTOR_PATH" ] && [ ! -z "$FROM" ] && [ ! -z "$TO" ]
     then
         activate
     else
@@ -42,3 +43,4 @@ main() {
     fi
 }                                                                 
 main "$@";                                                        
+
