@@ -21,14 +21,16 @@ install_dot () {
         fi        
         config_file=$(basename $config_path)
         # make backup of existing config
-        if [[ -e $prefix/$user/.$config_file ]];
+        config_base="$prefix/$user/.turbo-happiness"
+        mkdir $config_base
+        if [[ -e $confi_base/.$config_file ]];
             then
-                echo "cp $prefix/$user/.$config_file $prefix/$user/$config_file.bk"
-                cp $prefix/$user/.$config_file $prefix/$user/$config_file.bk
-                echo "rm $prefix/$user/.$config_file"
-                rm $prefix/$user/.$config_file;
+                echo "cp $config_base/.$config_file $config_base/$config_file.bk"
+                cp $config_base/.$config_file $config_base/$config_file.bk
+                echo "rm $config_base/.$config_file"
+                rm $config_base/.$config_file;
         fi
-        cp /etc/turbo-happiness/$config_file $prefix/$user/.$config_file;
+        cp /etc/turbo-happiness/$config_file $config_base/.$config_file;
     done
     exit 0  
 }
