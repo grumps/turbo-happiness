@@ -4,28 +4,55 @@ USER=$(whoami)
 OBNAM=$(which obnam)
 LOGGER_TAG="obnam_wrapper"
 LOGGER="$(which logger) -t $LOGGER_TAG -i"
+CONFIG="/home/$USER/.turbo_happiness/$USER.$CONFIG_NAME.obnam.conf"
 
-echo "wtf"
-echo "starting for $USER" | $LOGGER -p user.info
-if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
-    $OBNAM backup $HOME --config=/home/$USER/$USER.home.obnam.conf
-    readonly backup_status="$?"
-else
-    echo "config for $USER not found." | $LOGGER -p user.crit
-    exit 1;
-fi
+usage() {
+    printf "
+    -c config name
+    -r root path
+    -h print this message
+    "
+}
+activate() {
+    echo "starting for $USER" | $LOGGER -p user.info
+    if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
+        echo "$OBNAM backup $HOME --config=$CONFIG --root=$ROOT_PATH $OBNAM_OPTS"
+        readonly backup_status="$?"
+    else
+        echo "config for $USER not found." | $LOGGER -p user.crit
+        exit 1;
+    fi
 
-echo $backup_status
+    if [ "$backup_status" = "0" ]; then
+    	echo "finished for $USER." | $LOGGER -p user.info
+    	exit $backup_status;
+    else
+    	logfile=$(awk -F "=" '/log/ {print $2; exit;}' $CONFIG)
+        todayd=$(date +"%Y-%m-%d")
+        hostz=$(hostname)
+        echo "Obnam lock couldn't be set on $hostz" | mail -s "$todayd obnam error" $USER
+        echo "failed for $USER with exit status $backup_status" | $LOGGER -p user.err
+        exit $backup_status;
+    fi
+    exit $?;
+}
 
-if [ "$backup_status" = "0" ]; then
-	echo "finished for $USER." | $LOGGER -p user.info
-	exit $backup_status;
-else
-	logfile=$(awk -F "=" '/log/ {print $2; exit;}' /home/$USER/$USER.home.obnam.conf)
-    todayd=$(date +"%Y-%m-%d")
-    hostz=$(hostname)
-    echo "Obnam lock couldn't be set on $hostz" | mail -s "$todayd obnam error" $USER
-    echo "failed for $USER with exit status $backup_status" | $LOGGER -p user.err
-    exit $backup_status;
-fi
-exit $?;
+main() {
+    while getopts c:r:h name                          
+    do                                                            
+        case $name in
+            c)readonly CONFIG_NAME=$OPTARG;;
+            r)readonly ROOT_PATH=$OPTARG;;
+            h)usage && kill -INT $$;;
+            *)echo "Invalid argument" && usage && kill -INT $$;; 
+        esac                                                      
+    done
+    USER=$(whoami)
+    OBNAM=$(which obnam)
+    LOGGER_TAG="obnam_wrapper"
+    LOGGER="$(which logger) -t $LOGGER_TAG -i"
+    OBNAM_OPTS="--exclude-caches"
+    CONFIG="/home/$USER/.turbo-happiness/$USER.$CONFIG_NAME.obnam.conf"
+    activate
+}
+main "$@";
