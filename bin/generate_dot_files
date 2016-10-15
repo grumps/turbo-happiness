@@ -13,7 +13,7 @@ install_dot () {
 
     for config_path in "${configs_full_path[@]}"
     do
-       # check && remove previous existing config.
+        # check && remove previous existing config.
         if [[ $config_path == *".dpkg-dist"* ]];
             then
                 configs_full_path=(${configs_full_path[@]/$config})
@@ -22,8 +22,8 @@ install_dot () {
         config_file=$(basename $config_path)
         # make backup of existing config
         config_base="$prefix/$user/.turbo-happiness"
-        mkdir $config_base
-        if [[ -e $confi_base/.$config_file ]];
+        mkdir -p $config_base
+        if [[ -e $config_base/.$config_file ]];
             then
                 echo "cp $config_base/.$config_file $config_base/$config_file.bk"
                 cp $config_base/.$config_file $config_base/$config_file.bk
@@ -35,7 +35,7 @@ install_dot () {
     exit 0  
 }
 
-echo -n "Would you like to install dotfiles? [yn] "
+echo -n "Would you like to install dotfiles? [y/n] "
 read install_dot
 case "$install_dot" in
     y*|Y*) install_dot;;
