@@ -16,7 +16,7 @@ usage() {
 activate() {
     echo "starting for $USER" | $LOGGER -p user.info
     if [ -f /home/$USER/.ssh/config ] && [ -f /home/$USER/$USER.home.obnam.conf ]; then
-        echo "$OBNAM backup $HOME --config=$CONFIG --root=$ROOT_PATH $OBNAM_OPTS"
+        $OBNAM backup $HOME --config=$CONFIG --root=$ROOT_PATH $OBNAM_OPTS
         readonly backup_status="$?"
     else
         echo "config for $USER not found." | $LOGGER -p user.crit
