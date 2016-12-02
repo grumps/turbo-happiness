@@ -13,7 +13,7 @@ else
 fi
 
 if [ -f /home/$USER/.ssh/config ]; then
-    $RSYNC -rl --exclude-from=/etc/turbo-happiness/rsync_exclude.conf $HOME -e ssh $USER.$BACKUP_SERVER:$BACKUP_PATH/$USER/rsync
+    $RSYNC -rl -xx --exclude-from=/etc/turbo-happiness/rsync_exclude.conf $HOME -e ssh $USER.$BACKUP_SERVER:$BACKUP_PATH/$USER/rsync
     rsync_status="$?"
     if [ "$rsync_status" = "0" ]; then
         echo "complete for $USER" | $LOGGER -p user.err
