@@ -8,3 +8,8 @@ gtag() {
     git tag -a $new_tag -m $tag_message
     echo "tag created: $new_tag"
 }
+killdj-server() {
+    PID=$(ps aux | grep "manage.py runserver" | grep -Fv "grep" | awk '{print $2}')
+    echo "Killing $PID"
+    kill -9 $PID
+}
